@@ -1,25 +1,70 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Home from './views/Home.vue'
+import Main from './components/Main'
+import Login from './components/Login'
+import Register from './components/Register'
+import axios from 'axios';
 
-Vue.use(Router)
+Vue.use(Router);
 
-export default new Router({
-  mode: 'history',
-  base: process.env.BASE_URL,
-  routes: [
-    {
-      path: '/',
-      name: 'home',
-      component: Home
+let store = {
+    state: {
+        fetched: false,
+        isAuthorised: false
     },
-    {
-      path: '/about',
-      name: 'about',
-      // route level code-splitting
-      // this generates a separate chunk (about.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
-      component: () => import(/* webpackChunkName: "about" */ './views/About.vue')
+    setAuthorised(bool) {
+        this.state.isAuthorised = bool;
     }
-  ]
-})
+};
+
+
+axios({
+    withCredentials: true,
+    method: 'get',
+    url: 'http://localhost:8080/WebLab4_t-1.0-SNAPSHOT/api/users/isAuthorised',
+}).then((response) => {
+    if (response.data.success === true) {
+        store.setAuthorised(true);
+    }
+    store.state.fetched = true;
+}).catch(err => {
+    console.log(err);
+    store.state.fetched = true;
+});
+
+
+const router = new Router({
+    mode: 'history',
+    base: process.env.BASE_URL,
+    routes: [
+        {
+            path: '/main',
+            name: 'Main',
+            component: Main,
+            props: {store}
+        },
+        {
+            path: '/',
+            name: 'Login',
+            component: Login,
+            props: {store}
+        },
+        {
+            path: '/register',
+            name: 'register',
+            component: Register,
+            props: {store}
+        }
+    ]
+});
+
+router.beforeEach((to, from, next) => {
+    if (to.fullPath === '/main' && store.state.fetched) {
+        if (!store.state.isAuthorised) {
+            next('/');
+        }
+    }
+    next();
+});
+
+export default router;

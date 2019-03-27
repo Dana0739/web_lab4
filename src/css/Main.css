@@ -1,0 +1,21 @@
+.cls-2 {
+    fill: none;
+}
+
+.cls-2, .cls-3 {
+    stroke: #000;
+    stroke-miterlimit: 10;
+    stroke-width: 0.5px;
+}
+
+.cls-4 {
+    font-size: 12px;
+}
+
+.cls-4, .cls-5 {
+    font-family: MyriadPro-Regular, Myriad Pro, serif;
+}
+
+.cls-5 {
+    font-size: 14px;
+}

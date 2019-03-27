@@ -77,7 +77,7 @@
         <div id="plot">
             <svg id="svg_plot" xmlns="http://www.w3.org/2000/svg"
                  viewBox="0 0 300 300"
-                 @click="plotClicked($event)">
+                 v-on:click="plotClicked">
                 <title>Plot</title>
 
                 <rect class="cls-1" x="150" y="30" width="60" height="120"></rect>
@@ -238,8 +238,8 @@
             },
 
             plotClicked: function(event) {
-                this.x = this.convertXReverse(+event.nativeEvent.offsetX);
-                this.y = this.convertYReverse(+event.nativeEvent.offsetY);
+                this.x = this.convertXReverse(+event.offsetX).toFixed(5);
+                this.y = this.convertYReverse(+event.offsetY).toFixed(5);
                 this.submitData();
             },
 
@@ -337,7 +337,7 @@
     }
 
     input, button, select, optgroup, textarea {
-        margin: 4px;
+        margin: 4px !important;
     }
 
     body {
@@ -376,7 +376,6 @@
         grid-template-columns: auto auto auto;
         grid-template-rows: 1fr auto;
         justify-items: center;
-        align-items: center;
     }
 
     #header {
